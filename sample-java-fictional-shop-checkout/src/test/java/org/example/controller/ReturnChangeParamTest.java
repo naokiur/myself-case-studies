@@ -9,16 +9,20 @@ class ReturnChangeParamTest {
 
   @Test
   void 一行目のパラメータが1つ二行目が1つである場合クラスを生成できること() {
-    var target = new ReturnChangeParam("100", "200");
+    var firstParam = "001";
+    var secondParam = "200";
+    var target = new ReturnChangeParam(firstParam, secondParam);
 
-    assertEquals(List.of("100"), target.codes);
+    assertEquals(List.of("001"), target.codes);
     assertEquals("200", target.money);
   }
   @Test
   void 一行目のパラメータが2つ二行目が1つである場合クラスを生成できること() {
-    var target = new ReturnChangeParam("100,200", "200");
+    var firstParam = "001,002";
+    var secondParam = "200";
+    var target = new ReturnChangeParam(firstParam, secondParam);
 
-    assertEquals(List.of("100", "200"), target.codes);
+    assertEquals(List.of("001", "002"), target.codes);
     assertEquals("200", target.money);
   }
 }
