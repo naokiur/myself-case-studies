@@ -7,10 +7,15 @@ import org.example.repository.ItemRepository;
 
 public class CheckoutService {
 
+  private final ItemRepository itemRepository;
+
+  public CheckoutService(ItemRepository itemRepository) {
+    this.itemRepository = itemRepository;
+  }
+
   public int returnChange(List<String> paramCodes, String paramMoney) {
-    var repository = new ItemRepository();
     // TECH: N+1
-    var items = paramCodes.stream().map(repository::getById).toList();
+    var items = paramCodes.stream().map(this.itemRepository::getById).toList();
     var money = new Money(paramMoney);
 
     var deal = new Deal(items, money);

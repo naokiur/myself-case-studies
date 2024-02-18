@@ -1,7 +1,9 @@
 package org.example;
 
 import java.util.Scanner;
+import org.example.application.CheckoutService;
 import org.example.controller.CheckoutController;
+import org.example.repository.ItemRepository;
 
 public class Main {
 
@@ -15,7 +17,11 @@ public class Main {
     System.out.println("first: " + firstParam);
     System.out.println("second: " + secondParam);
 
-    var controller = new CheckoutController();
+    // 依存性を外部から注入
+    var repository = new ItemRepository();
+    var service = new CheckoutService(repository);
+    var controller = new CheckoutController(service);
+
     var result = controller.returnChange(firstParam, secondParam);
 
     System.out.println("result: " + result);
