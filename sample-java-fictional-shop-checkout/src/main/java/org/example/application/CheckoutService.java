@@ -5,11 +5,8 @@ import org.example.domain.entity.Deal;
 
 public class CheckoutService {
 
-  public int returnChange(List<String> codes, String params) {
-    var deal = new Deal();
-    System.out.println("Hello world!" + params);
-    System.out.println("Hello world!" + String.join(",", codes));
-
+  public int returnChange(List<String> codes, String money) {
+    var deal = new Deal(codes, money);
     return deal.charge();
   }
 }
