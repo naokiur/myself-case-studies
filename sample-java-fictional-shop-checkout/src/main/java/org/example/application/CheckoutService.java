@@ -15,10 +15,10 @@ public class CheckoutService {
 
   public int returnChange(List<String> paramCodes, String paramMoney) {
     // TECH: N+1
-    var items = paramCodes.stream().map(this.itemRepository::getById).toList();
+    var items = this.itemRepository.findByIds(paramCodes);
     var money = new Money(paramMoney);
-
     var deal = new Deal(items, money);
+
     return deal.charge();
   }
 }
