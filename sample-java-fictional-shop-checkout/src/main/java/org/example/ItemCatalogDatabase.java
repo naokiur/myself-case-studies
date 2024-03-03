@@ -1,5 +1,8 @@
 package org.example;
 
+/**
+ * 商品情報のカタログデータソースとしてのEnumクラス
+ */
 public enum ItemCatalogDatabase {
   HAM("001", 250),
   ORANGE_JUICE("002", 100);

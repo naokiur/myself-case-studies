@@ -1,5 +1,8 @@
 package org.example.domain.value;
 
+/**
+ * 支払い情報：金額クラス
+ */
 public class Money {
   private final int value;
 

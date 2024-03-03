@@ -3,6 +3,9 @@ package org.example.controller;
 import java.util.List;
 import java.util.stream.Stream;
 
+/**
+ * お釣り処理のためのパラメータクラス
+ */
 class ReturnChangeParam {
 
   List<String> codes;
