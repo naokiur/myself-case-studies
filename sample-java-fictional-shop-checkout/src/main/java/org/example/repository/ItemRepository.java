@@ -12,7 +12,7 @@ import org.example.domain.value.Item;
 public class ItemRepository {
 
   /**
-   * 商品の識別番号に基づく商品情報をベータベース・データソースから取得する
+   * 商品の識別番号に基づく商品情報をデータベース・データソースから取得する
    * @param ids 商品の識別番号のリスト
    * @return 商品情報のリスト
    */
