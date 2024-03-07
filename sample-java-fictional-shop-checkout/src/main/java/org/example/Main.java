@@ -18,6 +18,7 @@ public class Main {
 
     System.out.println("first: " + firstParam);
     System.out.println("second: " + secondParam);
+    System.out.println("third: " + thirdParam);
 
     // 依存性を外部から注入
     var repository = new ItemRepository();
