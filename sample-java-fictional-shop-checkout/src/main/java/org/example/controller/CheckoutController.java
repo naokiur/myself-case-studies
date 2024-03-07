@@ -24,6 +24,6 @@ public class CheckoutController {
 
     var params = new ReturnChangeParam(firstRawParam, secondRawParam, thirdRawParam);
 
-    return this.checkoutService.returnChange(params.codes, params.money);
+    return this.checkoutService.returnChange(params.codes, params.directItems, params.money);
   }
 }
