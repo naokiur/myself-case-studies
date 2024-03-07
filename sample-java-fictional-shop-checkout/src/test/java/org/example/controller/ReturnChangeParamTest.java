@@ -1,9 +1,9 @@
 package org.example.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 class ReturnChangeParamTest {
@@ -16,8 +16,7 @@ class ReturnChangeParamTest {
     var target = new ReturnChangeParam(firstParam, secondParam, thirdParam);
 
     assertEquals(List.of("001"), target.codes);
-    assertTrue(target.directItems.containsKey("831"));
-    assertEquals("100", target.directItems.get("831"));
+    assertEquals(Map.of("831", "100"), target.directItems);
     assertEquals("200", target.money);
   }
 
@@ -41,10 +40,7 @@ class ReturnChangeParamTest {
     var target = new ReturnChangeParam(firstParam, secondParam, thirdParam);
 
     assertEquals(0, target.codes.size());
-    assertTrue(target.directItems.containsKey("831"));
-    assertTrue(target.directItems.containsKey("220"));
-    assertEquals("200", target.directItems.get("831"));
-    assertEquals("300", target.directItems.get("220"));
+    assertEquals(Map.of("831", "200", "220", "300"), target.directItems);
     assertEquals("200", target.money);
   }
 
@@ -57,10 +53,7 @@ class ReturnChangeParamTest {
     var target = new ReturnChangeParam(firstParam, secondParam, thirdParam);
 
     assertEquals(List.of("001", "002"), target.codes);
-    assertTrue(target.directItems.containsKey("831"));
-    assertTrue(target.directItems.containsKey("220"));
-    assertEquals("200", target.directItems.get("831"));
-    assertEquals("300", target.directItems.get("220"));
+    assertEquals(Map.of("831", "200", "220", "300"), target.directItems);
     assertEquals("200", target.money);
   }
 
@@ -72,9 +65,7 @@ class ReturnChangeParamTest {
     var target = new ReturnChangeParam(firstParam, secondParam, thirdParam);
 
     assertEquals(List.of("001", "002", "test"), target.codes);
-    assertEquals(1, target.directItems.size());
-    assertTrue(target.directItems.containsKey("abc"));
-    assertEquals("abcddd", target.directItems.get("abc"));
+    assertEquals(Map.of("abc", "abcddd"), target.directItems);
     assertEquals("abc", target.money);
   }
 }
