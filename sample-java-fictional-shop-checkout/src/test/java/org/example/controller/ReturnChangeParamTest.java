@@ -3,7 +3,6 @@ package org.example.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 class ReturnChangeParamTest {
@@ -16,7 +15,7 @@ class ReturnChangeParamTest {
     var target = new ReturnChangeParam(firstParam, secondParam, thirdParam);
 
     assertEquals(List.of("001"), target.codes);
-    assertEquals(Map.of("831", "100"), target.directItems);
+    assertEquals(List.of("831:100"), target.directItems);
     assertEquals("200", target.money);
   }
 
@@ -40,7 +39,7 @@ class ReturnChangeParamTest {
     var target = new ReturnChangeParam(firstParam, secondParam, thirdParam);
 
     assertEquals(0, target.codes.size());
-    assertEquals(Map.of("831", "200", "220", "300"), target.directItems);
+    assertEquals(List.of("831:200", "220:300"), target.directItems);
     assertEquals("200", target.money);
   }
 
@@ -53,7 +52,7 @@ class ReturnChangeParamTest {
     var target = new ReturnChangeParam(firstParam, secondParam, thirdParam);
 
     assertEquals(List.of("001", "002"), target.codes);
-    assertEquals(Map.of("831", "200", "220", "300"), target.directItems);
+    assertEquals(List.of("831:200", "220:300"), target.directItems);
     assertEquals("200", target.money);
   }
 
@@ -65,7 +64,7 @@ class ReturnChangeParamTest {
     var target = new ReturnChangeParam(firstParam, secondParam, thirdParam);
 
     assertEquals(List.of("001", "002", "test"), target.codes);
-    assertEquals(Map.of("abc", "abcddd"), target.directItems);
+    assertEquals(List.of("abc:abcddd"), target.directItems);
     assertEquals("abc", target.money);
   }
 }

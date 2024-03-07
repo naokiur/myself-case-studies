@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import org.example.ItemCatalogDatabase;
 import org.example.repository.ItemRepository;
 import org.junit.jupiter.api.Test;
@@ -22,7 +21,7 @@ class CheckoutServiceTest {
     );
     var targetMoney = "400";
 
-    assertEquals(50, service.returnChange(targetCodes, Map.of(), targetMoney));
+    assertEquals(50, service.returnChange(targetCodes, List.of(), targetMoney));
   }
 
   @Test
@@ -33,9 +32,8 @@ class CheckoutServiceTest {
     var targetCodes = List.of(
         ItemCatalogDatabase.HAM.id
     );
-    var targetDirects = Map.of(
-        "831",
-        "120"
+    var targetDirects = List.of(
+        "831:120"
     );
     var targetMoney = "400";
 
@@ -43,15 +41,27 @@ class CheckoutServiceTest {
   }
 
   @Test
-  void 空想題材具体例_appendix_direct_種別番号のみ買い方および複数購入が可能かでありお釣り情報を返却できること() {
+  void 空想題材具体例_appendix_direct_種別番号のみ買い方および複数購入が可能でありお釣り情報を返却できること() {
     var repository = new ItemRepository();
     var service = new CheckoutService(repository);
 
-    var targetDirects = Map.of(
-        "029",
-        "300",
-        "831",
-        "120"
+    var targetDirects = List.of(
+        "029:300",
+        "831:120"
+    );
+    var targetMoney = "500";
+
+    assertEquals(80, service.returnChange(List.of(), targetDirects, targetMoney));
+  }
+
+  @Test
+  void 空想題材具体例_appendix_direct_種別番号のみ買い方および複数かつ同一種別番号の購入が可能でありお釣り情報を返却できること() {
+    var repository = new ItemRepository();
+    var service = new CheckoutService(repository);
+
+    var targetDirects = List.of(
+        "831:300",
+        "831:120"
     );
     var targetMoney = "500";
 

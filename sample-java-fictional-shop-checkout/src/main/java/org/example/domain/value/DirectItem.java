@@ -19,9 +19,9 @@ public class DirectItem {
     this.typeId = typeId;
     this.price = price;
   }
-  public DirectItem(String typeId, String price) {
-    this.typeId = typeId;
-    this.price = Integer.parseInt(price);
+  public DirectItem(String typeIdAndPrice) {
+    this.typeId = typeIdAndPrice.split(":")[0];
+    this.price = Integer.parseInt(typeIdAndPrice.split(":")[1]);
   }
 
   public int getPrice() {
