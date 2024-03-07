@@ -60,4 +60,4 @@
 
 ### 全体イメージ
 
-![全体イメージ](example-java/doc/overall_picture.png)
+![全体イメージ](doc/overall_picture.png)
