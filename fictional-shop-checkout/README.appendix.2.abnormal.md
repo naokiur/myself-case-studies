@@ -4,7 +4,7 @@
 
 ### 登場人物
 
-[README.mdの空想題材](README)と同じ
+[README.mdの空想題材](README.md)と同じ
 
 ### ユースケース
 
