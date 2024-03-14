@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -66,5 +67,14 @@ class ReturnChangeParamTest {
     assertEquals(List.of("001", "002", "test"), target.codes);
     assertEquals(List.of("abc:abcddd"), target.directItems);
     assertEquals("abc", target.money);
+  }
+
+  @Test
+  void パラメータ異常_1行目の1つの文字数が100を超えるときパラメータ例外を発生させること() {
+    var firstParam = "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567891";
+    var secondParam = "831:200";
+    var thirdParam = "200";
+
+    assertThrows(ParametersException.class, () -> new ReturnChangeParam(firstParam, secondParam, thirdParam));
   }
 }
