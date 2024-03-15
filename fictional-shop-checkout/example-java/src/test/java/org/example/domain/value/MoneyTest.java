@@ -12,6 +12,7 @@ class MoneyTest {
   void 数字でないとき例外が発生すること() {
     var param = "abc";
 
+    // HACK: DomainExceptionに寄せたほうが良い？
     assertThrows(NumberFormatException.class, () -> new Money(param));
   }
 
