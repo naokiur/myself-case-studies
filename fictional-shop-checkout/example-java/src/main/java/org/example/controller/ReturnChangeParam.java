@@ -16,6 +16,7 @@ class ReturnChangeParam {
   private static final String PARAM_ROW_SEPARATE = ",";
   private static final String PARAM_KEY_VALUE_SEPARATE = ":";
 
+  // HACK: idea) 条件分岐が肥大化してきたため、ReturnChangeParamのフィールドもクラス化する
   public ReturnChangeParam(String firstParam, String secondParam, String thirdParam) {
     // ブランクができた場合は除去する
     // 100文字パラメータチェックのために2種類のリストに分割する
