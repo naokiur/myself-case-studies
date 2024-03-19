@@ -90,6 +90,27 @@ class DealTest {
 
     DomainException e = assertThrows(DomainException.class,
         deal::charge);
-    assertEquals("取引情報：合計金額が1000000を超えているため、扱うことができません。", e.getMessage());
+    assertEquals("取引情報：合計金額が1,000,000円を超えているため、扱うことができません。",
+        e.getMessage());
+  }
+
+  @Test
+  void charge_合計金額よりも支払い情報が少ないとき例外が発生すること() {
+    var targetItems = List.of(
+        new Item("001", 250),
+        new Item("002", 100)
+    );
+    var targetDirectItems = List.of(
+        new DirectItem("900", 300),
+        new DirectItem("800", 200)
+    );
+    var targetMoney = new Money("500");
+    var deal = new Deal(targetItems, targetDirectItems, targetMoney);
+
+    DomainException e = assertThrows(DomainException.class, deal::charge);
+    assertEquals(
+        "取引情報：商品の合計金額よりも支払い情報が350円不足しています。お客様に確認してください。",
+        e.getMessage());
+
   }
 }

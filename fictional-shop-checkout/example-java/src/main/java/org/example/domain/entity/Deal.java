@@ -18,6 +18,7 @@ public class Deal {
 
   private static final int DEAL_SIZE_MAX_VALUE = 100;
   private static final int DEAL_PRICE_MAX_VALUE = 1000000;
+  private static final String MESSAGE_FORMAT_LACK_MONEY = "取引情報：商品の合計金額よりも支払い情報が%d円不足しています。お客様に確認してください。";
 
   public Deal(List<Item> codes, List<DirectItem> directItems, Money money) {
 
@@ -45,6 +46,12 @@ public class Deal {
 
     if (sumOfDeal > DEAL_PRICE_MAX_VALUE) {
       throw new DomainException("取引情報：合計金額が1,000,000円を超えているため、扱うことができません。");
+    }
+
+    var charge = this.money.getValue() - sumOfDeal;
+
+    if (0 > charge) {
+      throw new DomainException(MESSAGE_FORMAT_LACK_MONEY.formatted(Math.abs(charge)));
     }
 
     return this.money.getValue() - sumOfDeal;
