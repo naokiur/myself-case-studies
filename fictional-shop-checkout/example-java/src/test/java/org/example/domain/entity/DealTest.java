@@ -1,15 +1,35 @@
 package org.example.domain.entity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import org.example.domain.DomainException;
 import org.example.domain.value.DirectItem;
 import org.example.domain.value.Item;
 import org.example.domain.value.Money;
 import org.junit.jupiter.api.Test;
 
 class DealTest {
+
+  @Test
+  void 合計商品数が100を超えるとき例外が発生すること() {
+    var targetItems = List.of(
+        new Item("001", 250),
+        new Item("002", 100)
+    );
+    var targetDirectItems = IntStream.range(0, 100).mapToObj(v -> new DirectItem("00" + v, 250))
+        .toList();
+    var targetMoney = new Money("1000");
+
+    DomainException e = assertThrows(DomainException.class,
+        () -> new Deal(targetItems, targetDirectItems, targetMoney));
+    assertEquals("取引情報：合計商品数が100を超えているため、扱うことができません。", e.getMessage());
+  }
 
   @Test
   void charge_識別番号の結果350円の商品に対して支払いを400円渡しお釣りが50円であること() {
@@ -51,5 +71,25 @@ class DealTest {
     var deal = new Deal(targetItems, targetDirectItems, targetMoney);
 
     assertEquals(150, deal.charge());
+  }
+
+  @Test
+  void charge_合計金額が1000000を超えるとき例外が発生すること() {
+    var targetItems = new ArrayList<Item>();
+
+    var targetDirectItems = IntStream.range(0, 99).mapToObj(
+        v -> new DirectItem("00" + v, 10000)
+        // HACK: Mutable List取得するためstream.toListを使用しない。
+        // 最後だけ値を変えたテストデータを投入するため
+    ).collect(Collectors.toList());
+    var lastDirectItem = new DirectItem("last", 10001);
+    targetDirectItems.add(lastDirectItem);
+
+    var targetMoney = new Money("1000000");
+    var deal = new Deal(targetItems, targetDirectItems, targetMoney);
+
+    DomainException e = assertThrows(DomainException.class,
+        deal::charge);
+    assertEquals("取引情報：合計金額が1000000を超えているため、扱うことができません。", e.getMessage());
   }
 }

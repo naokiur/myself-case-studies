@@ -34,7 +34,6 @@ public class DirectItem {
     if (this.price > PRICE_MAX_VALUE) {
       throw new DomainException("直打ち商品：金額が1,000,000円を超えているため、扱うことができません。");
     }
-
   }
 
   public int getPrice() {
