@@ -40,7 +40,7 @@ class DealTest {
     var targetMoney = new Money("400");
     var deal = new Deal(targetItems, List.of(), targetMoney);
 
-    assertEquals(50, deal.charge());
+    assertEquals(50, deal.charge().price());
   }
 
   @Test
@@ -54,7 +54,7 @@ class DealTest {
     var targetMoney = new Money("1000");
     var deal = new Deal(targetItems, targetDirectItems, targetMoney);
 
-    assertEquals(450, deal.charge());
+    assertEquals(450, deal.charge().price());
   }
 
   @Test
@@ -70,7 +70,7 @@ class DealTest {
     var targetMoney = new Money("1000");
     var deal = new Deal(targetItems, targetDirectItems, targetMoney);
 
-    assertEquals(150, deal.charge());
+    assertEquals(150, deal.charge().price());
   }
 
   @Test

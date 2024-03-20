@@ -2,6 +2,7 @@ package org.example.application;
 
 import java.util.List;
 import org.example.domain.entity.Deal;
+import org.example.domain.entity.Deal.DealResult;
 import org.example.domain.value.DirectItem;
 import org.example.domain.value.Money;
 import org.example.repository.ItemRepository;
@@ -24,7 +25,7 @@ public class CheckoutService {
    * @param paramMoney 支払い情報: 金額のパラメータ
    * @return お釣りの金額
    */
-  public int returnChange(List<String> paramCodes, List<String> paramDirect, String paramMoney) {
+  public DealResult returnChange(List<String> paramCodes, List<String> paramDirect, String paramMoney) {
     var items = this.itemRepository.findByIds(paramCodes);
     var directItems = paramDirect.stream().map(DirectItem::new).toList();
     var money = new Money(paramMoney);

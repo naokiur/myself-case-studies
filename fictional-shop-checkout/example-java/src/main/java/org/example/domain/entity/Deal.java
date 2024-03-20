@@ -12,12 +12,14 @@ import org.example.domain.value.Money;
  */
 public class Deal {
 
+  public record DealResult(int price, String message) {}
   private final List<Item> items;
   private final List<DirectItem> directItems;
   private final Money money;
 
   private static final int DEAL_SIZE_MAX_VALUE = 100;
   private static final int DEAL_PRICE_MAX_VALUE = 1000000;
+  private static final int DEAL_NEED_STAMP_VALUE = 30000;
   private static final String MESSAGE_FORMAT_LACK_MONEY = "取引情報：商品の合計金額よりも支払い情報が%d円不足しています。お客様に確認してください。";
 
   public Deal(List<Item> codes, List<DirectItem> directItems, Money money) {
@@ -33,9 +35,9 @@ public class Deal {
 
   /**
    * お釣り
-   * @return お釣り
+   * @return お釣り情報
    */
-  public int charge() {
+  public DealResult charge() {
     // 識別番号の商品の合計金額
     var sumOfItems = this.items.stream().mapToInt(Item::getPrice).sum();
     // 直打ちの商品の合計金額
@@ -54,6 +56,12 @@ public class Deal {
       throw new DomainException(MESSAGE_FORMAT_LACK_MONEY.formatted(Math.abs(charge)));
     }
 
-    return this.money.getValue() - sumOfDeal;
+    // 収入印紙メッセージの追加
+    if (sumOfDeal > DEAL_NEED_STAMP_VALUE) {
+      return new DealResult(this.money.getValue() - sumOfDeal, "レジ店員の方へ：収入印紙200円を1枚貼付してください。");
+    }
+
+    // それ以外は空文字列
+    return new DealResult(this.money.getValue() - sumOfDeal, "");
   }
 }
