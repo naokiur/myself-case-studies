@@ -1,5 +1,7 @@
 package org.example.domain.value;
 
+import org.example.domain.DomainException;
+
 /**
  * 商品情報（直打ち）
  */
@@ -15,13 +17,23 @@ public class DirectItem {
    */
   private final String typeId;
 
+  private static final int PRICE_MAX_VALUE = 1000000;
+
   public DirectItem(String typeId, int price) {
     this.typeId = typeId;
     this.price = price;
   }
   public DirectItem(String typeIdAndPrice) {
-    this.typeId = typeIdAndPrice.split(":")[0];
-    this.price = Integer.parseInt(typeIdAndPrice.split(":")[1]);
+    var values = typeIdAndPrice.split(":");
+    var rawTypeId = values[0];
+    var rawPrice = values[1];
+
+    this.typeId = rawTypeId;
+    this.price = Integer.parseInt(rawPrice);
+
+    if (this.price > PRICE_MAX_VALUE) {
+      throw new DomainException("直打ち商品：金額が1,000,000円を超えているため、扱うことができません。");
+    }
   }
 
   public int getPrice() {

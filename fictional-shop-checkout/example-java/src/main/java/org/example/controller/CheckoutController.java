@@ -20,10 +20,13 @@ public class CheckoutController {
    * @param thirdRawParam 3つ目のパラメータ
    * @return お釣り
    */
-  public int returnChange(String firstRawParam, String secondRawParam, String thirdRawParam) {
+  public ReturnChangeResult returnChange(String firstRawParam, String secondRawParam, String thirdRawParam) {
 
     var params = new ReturnChangeParam(firstRawParam, secondRawParam, thirdRawParam);
+    var result = this.checkoutService.returnChange(params.codes, params.directItems, params.money);
 
-    return this.checkoutService.returnChange(params.codes, params.directItems, params.money);
+    // HACK: ControllerとService間の依存の低下に繋がればと考え、別クラスに組み替える
+    // Controller側でResultをJSON形式にするなどが必要となった場合は、ReturnChangeResultクラスの責務で吸収する
+    return new ReturnChangeResult(result.price(), result.message());
   }
 }
