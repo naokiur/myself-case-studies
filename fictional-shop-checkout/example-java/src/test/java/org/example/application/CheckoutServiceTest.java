@@ -122,4 +122,20 @@ class CheckoutServiceTest {
         "取引情報：商品の合計金額よりも支払い情報が250円不足しています。お客様に確認してください。",
         e.getMessage());
   }
+
+  @Test
+  void 空想題材具体例_存在しない識別番号を入力する() {
+    var repository = new ItemRepository();
+    var service = new CheckoutService(repository);
+
+    var targetCodes = List.of(
+        "99999"
+    );
+    var targetMoney = "400";
+
+    DomainException e = assertThrows(DomainException.class, () -> service.returnChange(targetCodes, List.of(), targetMoney));
+    assertEquals(
+        "識別番号商品：存在しない識別番号が含まれています。最初から登録しなおしてください。",
+        e.getMessage());
+  }
 }

@@ -5,6 +5,7 @@ import org.example.domain.entity.Deal;
 import org.example.domain.entity.Deal.DealResult;
 import org.example.domain.value.DirectItem;
 import org.example.domain.value.Money;
+import org.example.domain.value.RequestCodeItem;
 import org.example.repository.ItemRepository;
 
 /**
@@ -26,7 +27,7 @@ public class CheckoutService {
    * @return お釣りの金額
    */
   public DealResult returnChange(List<String> paramCodes, List<String> paramDirect, String paramMoney) {
-    var items = this.itemRepository.findByIds(paramCodes);
+    var items = new RequestCodeItem(this.itemRepository.findByIds(paramCodes), paramCodes) ;
     var directItems = paramDirect.stream().map(DirectItem::new).toList();
     var money = new Money(paramMoney);
 

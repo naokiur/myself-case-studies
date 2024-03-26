@@ -5,6 +5,7 @@ import org.example.domain.DomainException;
 import org.example.domain.value.DirectItem;
 import org.example.domain.value.Item;
 import org.example.domain.value.Money;
+import org.example.domain.value.RequestCodeItem;
 
 /**
  * 取引クラス
@@ -13,7 +14,7 @@ import org.example.domain.value.Money;
 public class Deal {
 
   public record DealResult(int price, String message) {}
-  private final List<Item> items;
+  private final RequestCodeItem codeItems;
   private final List<DirectItem> directItems;
   private final Money money;
 
@@ -22,13 +23,13 @@ public class Deal {
   private static final int DEAL_NEED_STAMP_VALUE = 30000;
   private static final String MESSAGE_FORMAT_LACK_MONEY = "取引情報：商品の合計金額よりも支払い情報が%d円不足しています。お客様に確認してください。";
 
-  public Deal(List<Item> codes, List<DirectItem> directItems, Money money) {
+  public Deal(RequestCodeItem codeItems, List<DirectItem> directItems, Money money) {
 
-    if (codes.size() + directItems.size() > DEAL_SIZE_MAX_VALUE) {
+    if (codeItems.getValues().size() + directItems.size() > DEAL_SIZE_MAX_VALUE) {
       throw new DomainException("取引情報：合計商品数が100を超えているため、扱うことができません。");
     }
 
-    this.items = codes;
+    this.codeItems = codeItems;
     this.directItems = directItems;
     this.money = money;
   }
@@ -39,7 +40,7 @@ public class Deal {
    */
   public DealResult charge() {
     // 識別番号の商品の合計金額
-    var sumOfItems = this.items.stream().mapToInt(Item::getPrice).sum();
+    var sumOfItems = this.codeItems.getValues().stream().mapToInt(Item::getPrice).sum();
     // 直打ちの商品の合計金額
     var sumOfDirectItems = this.directItems.stream().mapToInt(DirectItem::getPrice).sum();
 
