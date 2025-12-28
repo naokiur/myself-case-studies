@@ -7,7 +7,6 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
@@ -15,15 +14,18 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.time.Instant
 import java.util.*
+import org.springframework.context.annotation.Bean
+import org.springframework.boot.test.context.TestConfiguration
+import org.mockito.kotlin.mock
 
 @WebMvcTest(controllers = [ChatController::class])
-@Import(ApiExceptionHandler::class)
+@Import(ApiExceptionHandler::class, ChatControllerTest.TestConfig::class)
 class ChatControllerTest {
 
     @Autowired
     private lateinit var mockMvc: MockMvc
 
-    @MockBean
+    @Autowired
     private lateinit var chatService: ChatService
 
     @Test
@@ -150,5 +152,11 @@ class ChatControllerTest {
         )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.id").value(messageId.toString()))
+    }
+
+    @TestConfiguration
+    class TestConfig {
+        @Bean
+        fun chatService(): ChatService = mock()
     }
 }
