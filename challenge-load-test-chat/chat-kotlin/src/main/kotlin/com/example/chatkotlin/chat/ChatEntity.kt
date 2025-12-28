@@ -1,19 +1,16 @@
-package com.example.chatkotlin.domain
+package com.example.chatkotlin.chat
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 import java.time.Instant
-import java.util.*
+import java.util.UUID
 
-@Table("Messages")
-data class Message(
+@Table("Chats")
+data class ChatEntity(
     @Id
     val id: UUID? = null,
-    @Column("chat_id")
-    var chatId: UUID,
-    var sender: String,
-    var content: String,
+    val title: String? = null,
     @Column("created_at")
     val createdAt: Instant = Instant.now(),
     @Column("updated_at")

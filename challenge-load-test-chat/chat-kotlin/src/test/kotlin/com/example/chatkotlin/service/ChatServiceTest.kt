@@ -1,9 +1,10 @@
 package com.example.chatkotlin.service
 
-import com.example.chatkotlin.domain.Chat
-import com.example.chatkotlin.domain.Message
-import com.example.chatkotlin.repository.ChatRepository
-import com.example.chatkotlin.repository.MessageRepository
+import com.example.chatkotlin.chat.ChatEntity
+import com.example.chatkotlin.message.MessageEntity
+import com.example.chatkotlin.chat.ChatRepository
+import com.example.chatkotlin.chat.ChatService
+import com.example.chatkotlin.message.MessageRepository
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -30,7 +31,7 @@ class ChatServiceTest {
 
     @Test
     fun createChat_savesAndReturns() {
-        val saved = Chat(title = "hello")
+        val saved = ChatEntity(title = "hello")
         whenever(chatRepository.save(any())).thenReturn(saved)
 
         val result = service.createChat("hello")
@@ -41,12 +42,12 @@ class ChatServiceTest {
 
     @Test
     fun createChat_passesEntityWithNullId_ToSave() {
-        val saved = Chat(title = "t")
+        val saved = ChatEntity(title = "t")
         whenever(chatRepository.save(any())).thenReturn(saved)
 
         service.createChat("t")
 
-        val captor = argumentCaptor<Chat>()
+        val captor = argumentCaptor<ChatEntity>()
         verify(chatRepository).save(captor.capture())
         assertNull(captor.firstValue.id, "New Chat must have null id so that INSERT is executed, not UPDATE")
     }
@@ -54,12 +55,12 @@ class ChatServiceTest {
     @Test
     fun getChat_returnsEntityOrNull() {
         val id = UUID.randomUUID()
-        val chat = Chat(id = id, title = "t")
-        whenever(chatRepository.findById(id)).thenReturn(Optional.of(chat))
+        val chatEntity = ChatEntity(id = id, title = "t")
+        whenever(chatRepository.findById(id)).thenReturn(Optional.of(chatEntity))
 
         val found = service.getChat(id)
         assertNotNull(found)
-        assertEquals(chat, found)
+        assertEquals(chatEntity, found)
     }
 
     @Test
@@ -75,8 +76,8 @@ class ChatServiceTest {
     @Test
     fun createMessage_savesWhenChatExists() {
         val chatId = UUID.randomUUID()
-        whenever(chatRepository.findById(chatId)).thenReturn(Optional.of(Chat(id = chatId)))
-        val toSave = Message(chatId = chatId, sender = "a", content = "c")
+        whenever(chatRepository.findById(chatId)).thenReturn(Optional.of(ChatEntity(id = chatId)))
+        val toSave = MessageEntity(chatId = chatId, sender = "a", content = "c")
         val saved = toSave.copy(id = UUID.randomUUID())
         whenever(messageRepository.save(any())).thenReturn(saved)
 
@@ -96,10 +97,10 @@ class ChatServiceTest {
     @Test
     fun listMessages_returnsList() {
         val chatId = UUID.randomUUID()
-        whenever(chatRepository.findById(chatId)).thenReturn(Optional.of(Chat(id = chatId)))
+        whenever(chatRepository.findById(chatId)).thenReturn(Optional.of(ChatEntity(id = chatId)))
         val list = listOf(
-            Message(chatId = chatId, sender = "s1", content = "c1"),
-            Message(chatId = chatId, sender = "s2", content = "c2"),
+            MessageEntity(chatId = chatId, sender = "s1", content = "c1"),
+            MessageEntity(chatId = chatId, sender = "s2", content = "c2"),
         )
         whenever(messageRepository.findAllByChatId(chatId)).thenReturn(list)
 
@@ -120,7 +121,7 @@ class ChatServiceTest {
         val chatId = UUID.randomUUID()
         val otherChatId = UUID.randomUUID()
         val msgId = UUID.randomUUID()
-        val msg = Message(id = msgId, chatId = otherChatId, sender = "a", content = "b")
+        val msg = MessageEntity(id = msgId, chatId = otherChatId, sender = "a", content = "b")
         whenever(messageRepository.findById(msgId)).thenReturn(Optional.of(msg))
         assertThrows<NoSuchElementException> { service.getMessage(chatId, msgId) }
     }
@@ -129,7 +130,7 @@ class ChatServiceTest {
     fun updateMessage_updatesContentAndOptionalSender() {
         val chatId = UUID.randomUUID()
         val msgId = UUID.randomUUID()
-        val existing = Message(id = msgId, chatId = chatId, sender = "old", content = "oldC")
+        val existing = MessageEntity(id = msgId, chatId = chatId, sender = "old", content = "oldC")
         whenever(messageRepository.findById(msgId)).thenReturn(Optional.of(existing))
         val saved = existing.copy(sender = "new", content = "NEW")
         whenever(messageRepository.save(any())).thenReturn(saved)
@@ -144,7 +145,7 @@ class ChatServiceTest {
     fun updateMessage_keepsSenderWhenNull() {
         val chatId = UUID.randomUUID()
         val msgId = UUID.randomUUID()
-        val existing = Message(id = msgId, chatId = chatId, sender = "keep", content = "oldC")
+        val existing = MessageEntity(id = msgId, chatId = chatId, sender = "keep", content = "oldC")
         whenever(messageRepository.findById(msgId)).thenReturn(Optional.of(existing))
         val saved = existing.copy(content = "NEW")
         whenever(messageRepository.save(any())).thenReturn(saved)

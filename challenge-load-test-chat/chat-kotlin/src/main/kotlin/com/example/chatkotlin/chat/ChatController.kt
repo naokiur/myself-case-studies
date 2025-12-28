@@ -1,8 +1,6 @@
-package com.example.chatkotlin.web
+package com.example.chatkotlin.chat
 
-import com.example.chatkotlin.domain.Chat
-import com.example.chatkotlin.domain.Message
-import com.example.chatkotlin.service.ChatService
+import com.example.chatkotlin.message.MessageEntity
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -11,11 +9,11 @@ import java.util.*
 data class CreateChatRequest(val title: String?)
 data class ChatResponse(val id: UUID, val title: String?, val createdAt: String?, val updatedAt: String?) {
     companion object {
-        fun from(chat: Chat) = ChatResponse(
-            id = requireNotNull(chat.id),
-            title = chat.title,
-            createdAt = chat.createdAt?.toString(),
-            updatedAt = chat.updatedAt?.toString(),
+        fun from(chatEntity: ChatEntity) = ChatResponse(
+            id = requireNotNull(chatEntity.id),
+            title = chatEntity.title,
+            createdAt = chatEntity.createdAt?.toString(),
+            updatedAt = chatEntity.updatedAt?.toString(),
         )
     }
 }
@@ -31,7 +29,7 @@ data class MessageResponse(
     val updatedAt: String?,
 ) {
     companion object {
-        fun from(m: Message) = MessageResponse(
+        fun from(m: MessageEntity) = MessageResponse(
             id = requireNotNull(m.id),
             chatId = m.chatId,
             sender = m.sender,
