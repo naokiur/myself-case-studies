@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.gradle.api.tasks.compile.JavaCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("org.springframework.boot") version "3.4.2"
@@ -13,7 +14,7 @@ version = "0.0.1-SNAPSHOT"
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(25))
+        languageVersion.set(JavaLanguageVersion.of(23))
     }
 }
 
@@ -27,23 +28,22 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
-    runtimeOnly("org.postgresql:postgresql:42.7.4")
+    runtimeOnly("org.postgresql:postgresql:42.7.7")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        // Kotlin currently supports up to 21 for jvmTarget; this is compatible with running on Java 25
-        jvmTarget = "21"
-        freeCompilerArgs = listOf("-Xjsr305=strict")
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_23)
+        freeCompilerArgs.set(listOf("-Xjsr305=strict"))
     }
 }
 
 tasks.withType<JavaCompile> {
     // Ensure Java bytecode target matches Kotlin's to avoid mixed target errors
-    options.release.set(25)
+    options.release.set(23)
 }
 
 tasks.test {

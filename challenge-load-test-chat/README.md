@@ -46,4 +46,4 @@ Build
 
 Notes
 - Kotlin 2.1 + Spring Boot 3.4.x
-- Java toolchain: 25 (Kotlin jvmTarget 21)
+- Java toolchain: 23 (Kotlin jvmTarget 23)
