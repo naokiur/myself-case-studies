@@ -1,0 +1,1 @@
+rootProject.name = "example-kotlin-fictional-shop-checkout"
