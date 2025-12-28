@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -36,6 +37,18 @@ class ChatServiceTest {
 
         assertEquals(saved, result)
         verify(chatRepository).save(any())
+    }
+
+    @Test
+    fun createChat_passesEntityWithNullId_ToSave() {
+        val saved = Chat(title = "t")
+        whenever(chatRepository.save(any())).thenReturn(saved)
+
+        service.createChat("t")
+
+        val captor = argumentCaptor<Chat>()
+        verify(chatRepository).save(captor.capture())
+        assertNull(captor.firstValue.id, "New Chat must have null id so that INSERT is executed, not UPDATE")
     }
 
     @Test

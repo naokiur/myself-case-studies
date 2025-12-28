@@ -12,7 +12,7 @@ data class CreateChatRequest(val title: String?)
 data class ChatResponse(val id: UUID, val title: String?, val createdAt: String?, val updatedAt: String?) {
     companion object {
         fun from(chat: Chat) = ChatResponse(
-            id = chat.id,
+            id = requireNotNull(chat.id),
             title = chat.title,
             createdAt = chat.createdAt?.toString(),
             updatedAt = chat.updatedAt?.toString(),
@@ -32,7 +32,7 @@ data class MessageResponse(
 ) {
     companion object {
         fun from(m: Message) = MessageResponse(
-            id = m.id,
+            id = requireNotNull(m.id),
             chatId = m.chatId,
             sender = m.sender,
             content = m.content,
