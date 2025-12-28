@@ -6,14 +6,6 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME:chat}
     password: ${SPRING_DATASOURCE_PASSWORD:chatpass}
     driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    properties:
-      hibernate:
-        format_sql: true
-        jdbc.time_zone: UTC
-    open-in-view: false
   sql:
     init:
       mode: always
@@ -24,5 +16,4 @@ server:
 
 logging:
   level:
-    org.hibernate.SQL: warn
     org.springframework: info

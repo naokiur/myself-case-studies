@@ -33,7 +33,7 @@ data class MessageResponse(
     companion object {
         fun from(m: Message) = MessageResponse(
             id = m.id,
-            chatId = m.chat.id,
+            chatId = m.chatId,
             sender = m.sender,
             content = m.content,
             createdAt = m.createdAt?.toString(),
