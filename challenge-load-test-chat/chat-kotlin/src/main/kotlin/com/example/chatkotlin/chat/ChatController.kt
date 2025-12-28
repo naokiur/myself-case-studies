@@ -12,8 +12,8 @@ data class ChatResponse(val id: UUID, val title: String?, val createdAt: String?
         fun from(chatEntity: ChatEntity) = ChatResponse(
             id = requireNotNull(chatEntity.id),
             title = chatEntity.title,
-            createdAt = chatEntity.createdAt?.toString(),
-            updatedAt = chatEntity.updatedAt?.toString(),
+            createdAt = chatEntity.createdAt.toString(),
+            updatedAt = chatEntity.updatedAt.toString(),
         )
     }
 }
@@ -34,8 +34,8 @@ data class MessageResponse(
             chatId = m.chatId,
             sender = m.sender,
             content = m.content,
-            createdAt = m.createdAt?.toString(),
-            updatedAt = m.updatedAt?.toString(),
+            createdAt = m.createdAt.toString(),
+            updatedAt = m.updatedAt.toString(),
         )
     }
 }
