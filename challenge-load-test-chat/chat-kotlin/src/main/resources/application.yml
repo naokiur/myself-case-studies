@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: chat-kotlin
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/chatdb}
+    username: ${SPRING_DATASOURCE_USERNAME:chat}
+    password: ${SPRING_DATASOURCE_PASSWORD:chatpass}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc.time_zone: UTC
+    open-in-view: false
+  sql:
+    init:
+      mode: always
+      continue-on-error: false
+
+server:
+  port: ${SERVER_PORT:8080}
+
+logging:
+  level:
+    org.hibernate.SQL: warn
+    org.springframework: info
