@@ -1,6 +1,5 @@
 package com.example.chatkotlin.message
 
-import com.example.chatkotlin.chat.ChatService
 import com.example.chatkotlin.handler.ApiExceptionHandler
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Test
@@ -27,7 +26,7 @@ class MessageControllerTest {
     private lateinit var mockMvc: MockMvc
 
     @Autowired
-    private lateinit var chatService: ChatService
+    private lateinit var messageService: MessageService
 
     @Test
     fun listMessages_returnsOk() {
@@ -44,7 +43,7 @@ class MessageControllerTest {
                 content = "c2"
             ).copy(id = UUID.randomUUID()),
         )
-        whenever(chatService.listMessages(chatId)).thenReturn(list)
+        whenever(messageService.listMessages(chatId)).thenReturn(list)
 
         mockMvc.perform(get("/api/chat/{chatId}/messages", chatId))
             .andExpect(status().isOk)
@@ -58,7 +57,7 @@ class MessageControllerTest {
         val chatId = UUID.randomUUID()
         val messageId = UUID.randomUUID()
         val msg = MessageEntity(id = messageId, chatId = chatId, sender = "s", content = "c")
-        whenever(chatService.getMessage(chatId, messageId)).thenReturn(msg)
+        whenever(messageService.getMessage(chatId, messageId)).thenReturn(msg)
 
         mockMvc.perform(get("/api/chat/{chatId}/messages/{messageId}", chatId, messageId))
             .andExpect(status().isOk)
@@ -73,7 +72,7 @@ class MessageControllerTest {
         val chatId = UUID.randomUUID()
         val messageId = UUID.randomUUID()
         whenever(
-            chatService.getMessage(
+            messageService.getMessage(
                 chatId,
                 messageId
             )
@@ -89,7 +88,7 @@ class MessageControllerTest {
         val chatId = UUID.randomUUID()
         val messageId = UUID.randomUUID()
         val saved = MessageEntity(id = messageId, chatId = chatId, sender = "s", content = "c")
-        whenever(chatService.createMessage(chatId, "s", "c")).thenReturn(saved)
+        whenever(messageService.createMessage(chatId, "s", "c")).thenReturn(saved)
 
         mockMvc.perform(
             post("/api/chat/{chatId}/message", chatId)
@@ -108,7 +107,7 @@ class MessageControllerTest {
         val chatId = UUID.randomUUID()
         val messageId = UUID.randomUUID()
         val updated = MessageEntity(id = messageId, chatId = chatId, sender = "ns", content = "nc")
-        whenever(chatService.updateMessage(chatId, messageId, "nc", "ns")).thenReturn(updated)
+        whenever(messageService.updateMessage(chatId, messageId, "nc", "ns")).thenReturn(updated)
 
         mockMvc.perform(
             put("/api/chat/{chatId}/messages/{messageId}", chatId, messageId)
@@ -125,6 +124,6 @@ class MessageControllerTest {
     @TestConfiguration
     class TestConfig {
         @Bean
-        fun chatService(): ChatService = mock()
+        fun messageService(): MessageService = mock()
     }
 }

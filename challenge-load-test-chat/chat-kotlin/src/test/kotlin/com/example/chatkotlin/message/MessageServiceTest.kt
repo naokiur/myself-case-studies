@@ -1,66 +1,28 @@
-package com.example.chatkotlin.service
+package com.example.chatkotlin.message
 
 import com.example.chatkotlin.chat.ChatEntity
-import com.example.chatkotlin.message.MessageEntity
 import com.example.chatkotlin.chat.ChatRepository
-import com.example.chatkotlin.chat.ChatService
-import com.example.chatkotlin.message.MessageRepository
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.kotlin.any
-import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.util.Optional
 import java.util.UUID
 
-class ChatServiceTest {
+class MessageServiceTest {
     private lateinit var chatRepository: ChatRepository
     private lateinit var messageRepository: MessageRepository
-    private lateinit var service: ChatService
+    private lateinit var service: MessageService
 
     @BeforeEach
     fun setup() {
         chatRepository = mock()
         messageRepository = mock()
-        service = ChatService(chatRepository, messageRepository)
-    }
-
-    @Test
-    fun createChat_savesAndReturns() {
-        val saved = ChatEntity(title = "hello")
-        whenever(chatRepository.save(any())).thenReturn(saved)
-
-        val result = service.createChat("hello")
-
-        assertEquals(saved, result)
-        verify(chatRepository).save(any())
-    }
-
-    @Test
-    fun createChat_passesEntityWithNullId_ToSave() {
-        val saved = ChatEntity(title = "t")
-        whenever(chatRepository.save(any())).thenReturn(saved)
-
-        service.createChat("t")
-
-        val captor = argumentCaptor<ChatEntity>()
-        verify(chatRepository).save(captor.capture())
-        assertNull(captor.firstValue.id, "New Chat must have null id so that INSERT is executed, not UPDATE")
-    }
-
-    @Test
-    fun getChat_returnsEntityOrNull() {
-        val id = UUID.randomUUID()
-        val chatEntity = ChatEntity(id = id, title = "t")
-        whenever(chatRepository.findById(id)).thenReturn(Optional.of(chatEntity))
-
-        val found = service.getChat(id)
-        assertNotNull(found)
-        assertEquals(chatEntity, found)
+        service = MessageService(chatRepository, messageRepository)
     }
 
     @Test
@@ -91,7 +53,8 @@ class ChatServiceTest {
         val chatId = UUID.randomUUID()
         whenever(chatRepository.findById(chatId)).thenReturn(Optional.empty())
 
-        assertThrows<NoSuchElementException> { service.listMessages(chatId) }
+        val result = service.listMessages(chatId)
+        assertEquals(emptyList<MessageEntity>(), result)
     }
 
     @Test

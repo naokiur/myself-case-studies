@@ -3,19 +3,21 @@ package com.example.chatkotlin.chat
 import com.example.chatkotlin.handler.ApiExceptionHandler
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
+import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.test.context.TestConfiguration
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.Instant
-import java.util.*
-import org.springframework.context.annotation.Bean
-import org.springframework.boot.test.context.TestConfiguration
-import org.mockito.kotlin.mock
+import java.util.UUID
 
 @WebMvcTest(controllers = [ChatController::class])
 @Import(ApiExceptionHandler::class, ChatControllerTest.TestConfig::class)

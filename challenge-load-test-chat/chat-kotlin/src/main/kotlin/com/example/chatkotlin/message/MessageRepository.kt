@@ -1,7 +1,7 @@
 package com.example.chatkotlin.message
 
 import org.springframework.data.repository.ListCrudRepository
-import java.util.*
+import java.util.UUID
 
 interface MessageRepository : ListCrudRepository<MessageEntity, UUID> {
     fun findAllByChatId(chatId: UUID): List<MessageEntity>
