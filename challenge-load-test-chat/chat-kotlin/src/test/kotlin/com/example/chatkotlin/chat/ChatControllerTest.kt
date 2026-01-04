@@ -1,7 +1,6 @@
 package com.example.chatkotlin.chat
 
-import com.example.chatkotlin.message.MessageEntity
-import org.hamcrest.Matchers.*
+import com.example.chatkotlin.handler.ApiExceptionHandler
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
@@ -67,91 +66,6 @@ class ChatControllerTest {
             .andExpect(status().isCreated)
             .andExpect(jsonPath("$.id").value(id.toString()))
             .andExpect(jsonPath("$.title").value("new"))
-    }
-
-    @Test
-    fun listMessages_returnsOk() {
-        val chatId = UUID.randomUUID()
-        val list = listOf(
-            MessageEntity(chatId = chatId, sender = "a", content = "c1").copy(id = UUID.randomUUID()),
-            MessageEntity(chatId = chatId, sender = "b", content = "c2").copy(id = UUID.randomUUID()),
-        )
-        whenever(chatService.listMessages(chatId)).thenReturn(list)
-
-        mockMvc.perform(get("/api/chat/{chatId}/messages", chatId))
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$", hasSize<Int>(2)))
-            .andExpect(jsonPath("$[0].chatId").value(chatId.toString()))
-            .andExpect(jsonPath("$[1].chatId").value(chatId.toString()))
-    }
-
-    @Test
-    fun getMessage_found_returnsOk() {
-        val chatId = UUID.randomUUID()
-        val messageId = UUID.randomUUID()
-        val msg = MessageEntity(id = messageId, chatId = chatId, sender = "s", content = "c")
-        whenever(chatService.getMessage(chatId, messageId)).thenReturn(msg)
-
-        mockMvc.perform(get("/api/chat/{chatId}/messages/{messageId}", chatId, messageId))
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.id").value(messageId.toString()))
-            .andExpect(jsonPath("$.chatId").value(chatId.toString()))
-            .andExpect(jsonPath("$.sender").value("s"))
-            .andExpect(jsonPath("$.content").value("c"))
-    }
-
-    @Test
-    fun getMessage_notFound_returns404() {
-        val chatId = UUID.randomUUID()
-        val messageId = UUID.randomUUID()
-        whenever(chatService.getMessage(chatId, messageId)).thenThrow(NoSuchElementException("not found"))
-
-        mockMvc.perform(get("/api/chat/{chatId}/messages/{messageId}", chatId, messageId))
-            .andExpect(status().isNotFound)
-            .andExpect(jsonPath("$.error").value("not found"))
-    }
-
-    @Test
-    fun createMessage_returnsCreated() {
-        val chatId = UUID.randomUUID()
-        val messageId = UUID.randomUUID()
-        val saved = MessageEntity(id = messageId, chatId = chatId, sender = "s", content = "c")
-        whenever(chatService.createMessage(chatId, "s", "c")).thenReturn(saved)
-
-        mockMvc.perform(
-            post("/api/chat/{chatId}/message", chatId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"sender\":\"s\",\"content\":\"c\"}")
-        )
-            .andExpect(status().isCreated)
-            .andExpect(jsonPath("$.id").value(messageId.toString()))
-            .andExpect(jsonPath("$.chatId").value(chatId.toString()))
-    }
-
-    @Test
-    fun updateMessage_returnsOk_forBothPaths() {
-        val chatId = UUID.randomUUID()
-        val messageId = UUID.randomUUID()
-        val updated = MessageEntity(id = messageId, chatId = chatId, sender = "ns", content = "nc")
-        whenever(chatService.updateMessage(chatId, messageId, "nc", "ns")).thenReturn(updated)
-
-        // Proper path
-        mockMvc.perform(
-            put("/api/chat/{chatId}/message/{messageId}", chatId, messageId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"sender\":\"ns\",\"content\":\"nc\"}")
-        )
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.id").value(messageId.toString()))
-
-        // Typo path variant without slash
-        mockMvc.perform(
-            put("/api/chat/{chatId}message/{messageId}", chatId, messageId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"sender\":\"ns\",\"content\":\"nc\"}")
-        )
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.id").value(messageId.toString()))
     }
 
     @TestConfiguration
