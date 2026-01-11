@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: chat-kotlin
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/chatdb}
+    username: ${SPRING_DATASOURCE_USERNAME:chat}
+    password: ${SPRING_DATASOURCE_PASSWORD:chatpass}
+    driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      mode: always
+      continue-on-error: false
+
+server:
+  port: ${SERVER_PORT:8080}
+
+logging:
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}) %clr(%5p) [%X{traceId}] --- [%t] %-40.40logger{39} : %m%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{traceId}] %logger{36} - %msg%n"
+  file:
+    name: application.log
+  level:
+    org.springframework: info
