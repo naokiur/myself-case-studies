@@ -1,0 +1,15 @@
+{
+  "name": "test-by-k6",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --outfile=dist/index.js --platform=node --target=esnext --format=esm --external:k6 --external:k6/*"
+  },
+  "devDependencies": {
+    "@types/k6": "^1.4.0",
+    "esbuild": "^0.27.2",
+    "typescript": "^5.5.3"
+  },
+  "private": true
+}
