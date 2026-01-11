@@ -13,13 +13,16 @@ const RPS = __ENV.RPS ? parseInt(__ENV.RPS) : undefined;
 
 export const options: Options = {
   scenarios: {
-    load_test: {
-      executor: RPS ? 'constant-arrival-rate' : 'constant-vus',
+    load_test: RPS ? {
+      executor: 'constant-arrival-rate',
       rate: RPS || 10,
       timeUnit: '1s',
-      preAllocatedVUs: RPS ? Math.max(10, Math.ceil(RPS / 10)) : 10,
-      maxVUs: RPS ? Math.max(100, RPS) : 100,
-      vus: RPS ? undefined : 10,
+      preAllocatedVUs: Math.max(10, Math.ceil(RPS / 10)),
+      maxVUs: Math.max(100, RPS),
+      duration: '30s',
+    } : {
+      executor: 'constant-vus',
+      vus: 10,
       duration: '30s',
     },
   },
